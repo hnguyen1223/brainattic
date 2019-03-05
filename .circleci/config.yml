@@ -1,0 +1,118 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build-job:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:11.10.1-browsers
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Log the current branch
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+
+      # Restore local dependencies from cache
+      - restore_cache:
+          keys:
+              - v1-dependencies-{{ checksum "package.json" }}
+              - v1-dependencies-
+
+      # Install project dependencies
+      - run:
+          name: Install local dependencies
+          command: npm install
+
+      # Cache local dependencies if they don't exist
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+              - node_modules
+
+      # run tests!
+      - run:
+          name: Unit testing
+          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+      - run:
+          name: Integration testing
+          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+
+      # Build project with different configuration based on the current branch
+      - run:
+          name: Building
+          command: npm run build
+        # Cache the dist folder for the deploy job
+      - save_cache:
+          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+              - dist 
+  deploy-job:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:11.10.1-browsers
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+
+      - checkout
+
+      # Log the current branch
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+
+      - restore_cache:
+          keys:
+              - v2-dependencies-{{ checksum "package.json" }}
+              - v2-dependencies-
+
+      # Restore cache from the build job which contains the
+      # dist folder that needs to be deployed
+      - restore_cache:
+          keys:
+              - v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+
+      # Deploy to firebase
+      - run:
+          name: Deploy to Firebase
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+                ./node_modules/.bin/firebase deploy --project brainattic-dev --token=$FIREBASE_DEPLOY_TOKEN
+            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+                ./node_modules/.bin/firebase deploy --project brainattic --token=$FIREBASE_DEPLOY_TOKEN
+            fi
+          
+
+workflows:
+    version: 2
+    # The build and deploy workflow
+    build_and_deploy:
+        jobs:
+            - build-job
+            - deploy-job:
+                requires:
+                    - build-job
+                filters:
+                    branches:
+                        only:
+                            - develop
+                            - master
