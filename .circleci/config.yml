@@ -27,8 +27,8 @@ jobs:
       # Restore local dependencies from cache
       - restore_cache:
           keys:
-              - v$CACHE_VERSION-dependencies-{{ checksum "package.json" }}
-              - v$CACHE_VERSION-dependencies-
+              - v{{ .Environment.CACHE_VERSION }}-dependencies-{{ checksum "package.json" }}
+              - v{{ .Environment.CACHE_VERSION }}-dependencies-
 
       # Install project dependencies
       - run:
@@ -37,7 +37,7 @@ jobs:
 
       # Cache local dependencies if they don't exist
       - save_cache:
-          key: v$CACHE_VERSION-dependencies-{{ checksum "package.json" }}
+          key: v{{ .Environment.CACHE_VERSION }}-dependencies-{{ checksum "package.json" }}
           paths:
               - node_modules
 
@@ -56,7 +56,7 @@ jobs:
           command: npm run build
         # Cache the dist folder for the deploy job
       - save_cache:
-          key: v$CACHE_VERSION-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: v{{ .Environment.CACHE_VERSION }}-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
               - dist 
   deploy-job:
@@ -82,14 +82,14 @@ jobs:
 
       - restore_cache:
           keys:
-              - v$CACHE_VERSION-dependencies-{{ checksum "package.json" }}
-              - v$CACHE_VERSION-dependencies-
+              - v{{ .Environment.CACHE_VERSION }}-dependencies-{{ checksum "package.json" }}
+              - v{{ .Environment.CACHE_VERSION }}-dependencies-
 
       # Restore cache from the build job which contains the
       # dist folder that needs to be deployed
       - restore_cache:
           keys:
-              - v$CACHE_VERSION-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+              - v{{ .Environment.CACHE_VERSION }}-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
 
       # Deploy to firebase
       - run:
