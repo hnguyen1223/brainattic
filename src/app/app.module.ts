@@ -5,13 +5,15 @@ import { AngularMaterialModule } from './angular-material/angular-material.modul
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CodeSnippetComponent } from './code-snippet/code-snippet.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, CodeSnippetComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
