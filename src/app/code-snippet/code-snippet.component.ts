@@ -3,6 +3,7 @@ import * as Prism from 'prismjs';
 import 'prismjs/components/prism-java';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 import 'prismjs/plugins/show-invisibles/prism-show-invisibles';
+import 'prismjs/plugins/previewers/prism-previewers';
 
 const placeholderText = '// Code goes here';
 
@@ -12,14 +13,27 @@ const placeholderText = '// Code goes here';
   styleUrls: ['./code-snippet.component.scss']
 })
 export class CodeSnippetComponent implements OnInit {
-  @Input() code: string = `public class HelloWorld
-  {
-    public static void main(String[] args) {
-      System.out.println("Hello World!");
-    }
-  }
-https://www.google.ca
-`;
+  @Input() code: string = `.example-gradient {
+  background: -webkit-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* Chrome10+, Safari5.1+ */
+  background:    -moz-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* FF3.6+ */
+  background:     -ms-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* IE10+ */
+  background:      -o-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* Opera 11.10+ */
+  background:         linear-gradient(to right, #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* W3C */
+}
+.example-angle {
+  transform: rotate(10deg);
+}
+.example-color {
+  color: rgba(255, 0, 0, 0.2);
+  background: purple;
+  border: 1px solid hsl(100, 70%, 40%);
+}
+.example-easing {
+  transition-timing-function: linear;
+}
+.example-time {
+  transition-duration: 3s;
+}`;
 
   editable: boolean = false;
   constructor() {}

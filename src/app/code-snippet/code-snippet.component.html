@@ -4,5 +4,5 @@
     <button mat-raised-button class="snippet-button" matTooltip="Copy"><mat-icon>file_copy</mat-icon></button>
     <button *ngIf="!editable" mat-raised-button class="snippet-button" matTooltip="Edit" (click)="toggleEditable(snippet)"><mat-icon>edit</mat-icon></button>
     <button *ngIf="editable" mat-raised-button class="snippet-button" matTooltip="Save" (click)="toggleEditable(); save(snippet)"><mat-icon color="primary">save</mat-icon></button>
-  </div><code [attr.contenteditable]="editable" (blur)="1" (keydown)=onKeyDown($event) (keyup)=onKeyUp($event) #snippet class="language-java" spellcheck="false" id="snippets" >{{ code }}</code>
+  </div><code [attr.contenteditable]="editable" (blur)="1" (keydown)=onKeyDown($event) (keyup)=onKeyUp($event) #snippet class="language-css" spellcheck="false" id="snippets" >{{ code }}</code>
 </pre>
