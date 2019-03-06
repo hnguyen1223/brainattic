@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CodeSnippetComponent } from './code-snippet.component';
 
 import { AngularMaterialModule } from "../angular-material/angular-material.module";
+import { HttpClientModule } from '@angular/common/http';
 
 describe('CodeSnippetComponent', () => {
   let component: CodeSnippetComponent;
@@ -10,8 +11,9 @@ describe('CodeSnippetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports:[AngularMaterialModule],
-      declarations: [ CodeSnippetComponent ]
+      imports:[AngularMaterialModule, HttpClientModule],
+      declarations: [ CodeSnippetComponent ],
+      providers: [HttpClientModule]
     })
     .compileComponents();
   }));
