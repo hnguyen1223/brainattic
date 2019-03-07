@@ -9,8 +9,7 @@
 }
 .snippet-action-bar button {
   margin: 0 0.5em 0.5em 0;
-  width: 20px;
-  height: 70px;
+  height: 50px;
 }
 
 code {
@@ -24,4 +23,7 @@ code {
 .raised {
   box-shadow: 0 14px 28px rgba(0, 36, 102, 0.25),
     0 10px 10px rgba(0, 36, 102, 0.22);
+}
+
+.wrapper {  
 }

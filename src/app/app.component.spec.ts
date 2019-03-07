@@ -33,5 +33,5 @@ describe('AppComponent', () => {
   });
 });
 
-@Component({ selector: 'app-code-snippet', template: '' })
+@Component({ selector: 'app-note', template: '' })
 class CodeSnippetComponentStub {}

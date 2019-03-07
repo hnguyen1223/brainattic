@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="note" *ngFor="let note of (notes | async)">
+    /*meta
+    <div>{{ note.id }}</div>
+    <div>{{ note.note.title }}</div>
+    <div>{{ note.note.created }}</div>
+    <div>{{ note.note.modified }}</div>
+    <div>{{ note.note.fav }}</div>
+    <div>{{ note.note.tags }}</div>
+    */
+    <div class="wrapper" *ngFor="let item of note.note.content">
+      <div class="text" *ngIf="item.type == 1" contenteditable="true">
+        {{ item.text }}
+      </div>
+      <div class="link" *ngIf="item.type == 2" contenteditable="true">
+        {{ item.text }}
+      </div>
+      <app-code-snippet
+        *ngIf="item.type == 3"
+        [code]="item.text"
+      ></app-code-snippet>
+    </div>
+  </div>
+</div>

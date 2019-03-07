@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
+} from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import hljs from 'highlight.js';
 
@@ -9,16 +16,9 @@ const placeholderText = '// Code goes here';
   templateUrl: './code-snippet.component.html',
   styleUrls: ['./code-snippet.component.scss']
 })
-export class CodeSnippetComponent implements OnInit {
+export class CodeSnippetComponent implements OnInit, AfterViewInit {
   @ViewChild('snippet', { read: ElementRef }) snippet: ElementRef;
-  @Input() code: string = `.example-gradient {
-  background: -webkit-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* Chrome10+, Safari5.1+ */
-  background:    -moz-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* FF3.6+ */
-  background:     -ms-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* IE10+ */
-  background:      -o-linear-gradient(left,     #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* Opera 11.10+ */
-  background:         linear-gradient(to right, #cb60b3 0%, #c146a1 50%, #a80077 51%, #db36a4 100%); /* W3C */
-}
-.example-angle {
+  @Input() code: string = `.example-angle {
   transform: rotate(10deg);
 }
 .example-color {
@@ -33,9 +33,10 @@ export class CodeSnippetComponent implements OnInit {
   transition-duration: 3s;
 }`;
 
-  editable: boolean = false;
-  loading: boolean = false;
+  editable: boolean = true;
+  loading: boolean = true;
   constructor(private http: HttpClient) {}
+  counter = 0;
 
   ngOnInit() {
     this.snippet.nativeElement.addEventListener('paste', function(e) {
@@ -48,6 +49,10 @@ export class CodeSnippetComponent implements OnInit {
       // insert text manually
       document.execCommand('insertHTML', false, text);
     });
+  }
+
+  ngAfterViewInit() {
+    this.save(this.snippet.nativeElement);    
   }
 
   toggleEditable(el) {
