@@ -10,7 +10,7 @@ import { NoteComponent } from './note/note.component';
 import { NotesService } from './notes.service';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [AppComponent, CodeSnippetComponent, NoteComponent],
@@ -22,7 +22,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule
   ],
-  providers: [NotesService],
+  providers: [NotesService, { provide: FirestoreSettingsToken, useValue: {} }], //until timestampsInSnapshots is removed  https://github.com/angular/angularfire2/issues/1993
   bootstrap: [AppComponent]
 })
 export class AppModule {}
