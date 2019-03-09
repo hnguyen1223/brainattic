@@ -7,7 +7,7 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [AppComponent, CodeSnippetComponentStub]
+      declarations: [AppComponent, NoteComponentStub]
     }).compileComponents();
   }));
 
@@ -23,15 +23,15 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('brain-attic');
   });
 
-  it('should render title in a h1 tag', () => {
+  it('should render Hello! in a h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain(
-      'Welcome to brain-attic!'
+      'Hello!'
     );
   });
 });
 
 @Component({ selector: 'app-note', template: '' })
-class CodeSnippetComponentStub {}
+class NoteComponentStub {}

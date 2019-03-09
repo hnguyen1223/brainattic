@@ -1,16 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NoteComponent } from './note.component';
+import { CodeSnippetComponent } from "../code-snippet/code-snippet.component";
+import { Component } from '@angular/core';
 
-/* describe('NoteComponent', () => {
+describe('NoteComponent', () => {
   let component: NoteComponent;
   let fixture: ComponentFixture<NoteComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NoteComponent ]
+      declarations: [NoteComponent, CodeSnippetComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,4 +24,7 @@ import { NoteComponent } from './note.component';
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-}); */
+});
+
+@Component({ selector: 'app-code-snippet', template: '' })
+class CodeSnippetComponentStub { }

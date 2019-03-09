@@ -35,11 +35,11 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
 
   editable: boolean = true;
   loading: boolean = true;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   counter = 0;
 
   ngOnInit() {
-    this.snippet.nativeElement.addEventListener('paste', function(e) {
+    this.snippet.nativeElement.addEventListener('paste', function (e) {
       // cancel paste
       e.preventDefault();
 
@@ -52,7 +52,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.save(this.snippet.nativeElement);    
+    this.save(this.snippet.nativeElement);
   }
 
   toggleEditable(el) {

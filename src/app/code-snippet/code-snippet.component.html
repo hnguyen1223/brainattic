@@ -1,6 +1,6 @@
-<pre class="wrapper"><div class="snippet-action-bar">
+<pre [ngClass]="{raised: editable, hljs: true}"><div class="snippet-action-bar">
   <button mat-raised-button class="snippet-button" matTooltip="Copy">
-    <mat-icon>file_copy</mat-icon>
+    <mat-icon inline="true">file_copy</mat-icon>
   </button>
   <button
     *ngIf="!editable"
@@ -9,7 +9,7 @@
     matTooltip="Edit"
     (click)="toggleEditable(snippet); selectAll(snippet)"
   >
-    <mat-icon>edit</mat-icon>
+    <mat-icon inline="true">edit</mat-icon>
   </button>
   <button
     *ngIf="editable"
@@ -18,7 +18,7 @@
     matTooltip="Save"
     (click)="save(snippet)"color="accent"
   >
-    <mat-icon *ngIf="!loading">save</mat-icon><mat-spinner *ngIf="loading" diameter="30" color="primary">
+    <mat-icon *ngIf="!loading" inline="true">save</mat-icon><mat-spinner *ngIf="loading" diameter="30" color="primary">
     </mat-spinner></button>
-</div><code [attr.contenteditable]="editable" (keydown)=onKeyDown($event) (keyup)=onKeyUp($event) #snippet [ngClass]="{ raised: editable, hljs: true}" spellcheck="false" id="snippets" >{{ code }}</code>
+</div><code [attr.contenteditable]="editable" (keydown)=onKeyDown($event) (keyup)=onKeyUp($event) #snippet spellcheck="false" id="snippets" >{{ code }}</code>
 </pre>
