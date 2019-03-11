@@ -1,33 +1,25 @@
 <div class="note">
-<!--   <button mat-raised-button (click)="addSnippet()">add</button> -->
+  <!--   <button mat-raised-button (click)="addSnippet()">add</button> -->
   <div class="title" contenteditable="">{{ note.title }}</div>
   <div class="content-container">
     <div class="wrapper" *ngFor="let item of note.content; let i = index">
-      <div class="text" *ngIf="item.type == 1" contenteditable="true">
+      <div class="text" *ngIf="item.type == 1" contenteditable="editable">
         {{ item.text }}
       </div>
-      <div class="link" *ngIf="item.type == 2" contenteditable="true">
+      <div class="link" *ngIf="item.type == 2" contenteditable="editable">
         {{ item.text }}
       </div>
-      <div class="snippet-container" *ngIf="item.type == 3">
-        <app-code-snippet
-          [code]="item.text"
-          [editable]="false"
-        ></app-code-snippet>
-        <button
-          mat-button
-          class="new-line"
-          *ngIf="editable"
-          (click)="addText(i)"
-        >
-          <mat-icon>arrow_right</mat-icon>
-        </button>
-      </div>
+      <app-code-snippet
+        [code]="item.text"
+        [editable]="true"
+        *ngIf="item.type == 3"
+      ></app-code-snippet>
+      <button mat-button class="new-line" *ngIf="editable" (click)="addText(i)">
+        <mat-icon>arrow_right</mat-icon>
+      </button>
     </div>
   </div>
   <div class="meta">
-    <span
-      >{{ note.modified.seconds * 1000 | date: 'mediumDate' }}</span
-    >
+    <span>{{ note.modified.seconds * 1000 | date: 'mediumDate' }}</span>
   </div>
 </div>

@@ -9,7 +9,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NoteComponent } from './note/note.component';
 import { NotesService } from './notes.service';
 import { AngularFireModule } from '@angular/fire';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { environment } from 'src/environments/environment';
+import { IconsModule } from './icons/icons.module';
 import { NgxMasonryModule } from 'ngx-masonry';
 import {
   AngularFirestoreModule,
@@ -29,9 +31,11 @@ import { NotesContainerComponent } from './notes-container/notes-container.compo
     AppRoutingModule,
     AngularMaterialModule,
     HttpClientModule,
+    OverlayModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    NgxMasonryModule
+    NgxMasonryModule,
+    IconsModule
   ],
   providers: [NotesService, { provide: FirestoreSettingsToken, useValue: {} }], //until timestampsInSnapshots is removed  https://github.com/angular/angularfire2/issues/1993
   bootstrap: [AppComponent]

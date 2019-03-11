@@ -1,5 +1,5 @@
 <pre><div class="snippet-action-bar">
-  <button mat-raised-button class="snippet-button" matTooltip="Copy" tabindex="-1"><mat-icon inline="true" inline="true">file_copy</mat-icon></button>
+  <button mat-raised-button class="snippet-button" matTooltip="Copy" (click)="copyToClipboard(snippet)" tabindex="-1"><i-clipboard *ngIf="!isCopied"></i-clipboard><i-check *ngIf="isCopied" class="fill-green"></i-check></button>
   <button
   *ngIf="editable"
     mat-raised-button
@@ -7,5 +7,5 @@
     matTooltip="Delete Snippet"
     color="warn"
     tabindex="-1"
-  ><mat-icon inline="true">delete</mat-icon><mat-spinner *ngIf="false" diameter="30" color="primary"></mat-spinner></button>
+  ><i-trash-2></i-trash-2><mat-spinner *ngIf="false" diameter="30" color="primary"></mat-spinner></button>
 </div><code [attr.contenteditable]="editable" (keydown)=onKeyDown($event) (keyup)=onKeyUp($event) #snippet spellcheck="false" id="snippets" (blur)="save(snippet)" [style.overflow]="editable?'auto':'hidden'">{{ code }}</code></pre>

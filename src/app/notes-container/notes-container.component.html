@@ -9,6 +9,7 @@
     class="note grid-item"
     *ngFor="let note of (notes | async)"
     [note]="note"
+    (click)="editNote($event.target)"
   >
   </app-note>
 </ngx-masonry>

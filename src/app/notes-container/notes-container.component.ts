@@ -26,4 +26,7 @@ export class NotesContainerComponent implements OnInit {
   updateNote(note) {
     this.notesService.updateNote(note);
   }
+
+  editNote(element) {
+  }
 }

@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import hljs from 'highlight.js';
+import * as feather from 'feather-icons/';
 
 const placeholderText = '// Code goes here';
 
@@ -22,10 +23,12 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
 
   @Input() editable: boolean = false;
   loading: boolean = true;
+  isCopied: boolean = false;
   constructor(private http: HttpClient) {}
   counter = 0;
 
   ngOnInit() {
+    feather.replace({ color: 'red' });
     this.snippet.nativeElement.addEventListener('paste', function(e) {
       e.preventDefault();
       // get text representation of clipboard
@@ -118,5 +121,33 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
           //toast message goes here
         }
       );
+  }
+
+  copyToClipboard(element: Element) {
+    const selected =
+      document.getSelection().rangeCount > 0
+        ? document.getSelection().getRangeAt(0)
+        : false;
+    let newRange = document.createRange();
+    newRange.selectNode(element);
+    document.getSelection().removeAllRanges();
+    document.getSelection().addRange(newRange);
+    document.execCommand('copy');
+    document.getSelection().removeAllRanges();
+
+    /*     if (selected) {
+      console.log('selected');
+      const node = (<Range>selected).endContainer;
+      document.getSelection().removeAllRanges();
+      document.getSelection().addRange(selected);
+
+    } */
+    //toast message goes here
+    this.isCopied = true;
+    setTimeout(() => {
+      this.isCopied = false;
+    }, 2000);
+  }
+  deleteSnippet(element){
   }
 }
