@@ -18,34 +18,18 @@ const placeholderText = '// Code goes here';
 })
 export class CodeSnippetComponent implements OnInit, AfterViewInit {
   @ViewChild('snippet', { read: ElementRef }) snippet: ElementRef;
-  @Input() code: string = `.example-angle {
-  transform: rotate(10deg);
-}
-.example-color {
-  color: rgba(255, 0, 0, 0.2);
-  background: purple;
-  border: 1px solid hsl(100, 70%, 40%);
-}
-.example-easing {
-  transition-timing-function: linear;
-}
-.example-time {
-  transition-duration: 3s;
-}`;
+  @Input() code: string;
 
-  editable: boolean = true;
+  @Input() editable: boolean = false;
   loading: boolean = true;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   counter = 0;
 
   ngOnInit() {
-    this.snippet.nativeElement.addEventListener('paste', function (e) {
-      // cancel paste
+    this.snippet.nativeElement.addEventListener('paste', function(e) {
       e.preventDefault();
-
       // get text representation of clipboard
       var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-
       // insert text manually
       document.execCommand('insertHTML', false, text);
     });
@@ -60,7 +44,6 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
   }
 
   selectAll(el) {
-    el.setAttribute('contenteditable', 'true'); //Manually make it editable for focusing
     this.placeCaretAtEnd(el);
   }
 
@@ -76,50 +59,19 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
   onKeyDown(event) {
     if (event.key == 'Tab') {
       event.preventDefault();
-      let range = document.getSelection().getRangeAt(0);
+      document.execCommand('insertHTML', false, '  ');
+      /*       let range = document.getSelection().getRangeAt(0);
       let tabNode = document.createTextNode('  ');
       range.insertNode(tabNode);
-      range.setStart(range.endContainer, range.endOffset);
+      range.setStart(range.endContainer, range.endOffset); */
+    } else if (event.ctrlKey && event.key === 's') {
+      console.log('Ctrl+S!');
+      event.preventDefault();
+      this.save(event.target);
     }
   }
 
-  onKeyUp(event) {
-    /* 
-    if (event.target.innerText != this.code) {
-      let range = document.getSelection().getRangeAt(0);
-      let newRange = range.cloneRange();
-      newRange.selectNodeContents(event.target);
-      newRange.setEnd(range.endContainer, range.endOffset);
-      let preText = newRange.toString();
-      let offset = 0;
-      let endNode;
-      let newText = '';
-      if (preText != '') {
-        console.log(`preText ${preText}`);
-        this.code = event.target.innerText;
-        //hljs.highlightBlock(event.target);
-        var result = this.getCursor(event.target, preText, newText);
-        endNode = result.node;
-        offset = event.key == 'Enter' ? 0 : result.offset;
-        console.log(`node ${endNode.textContent}`);
-        console.log(`offset ${offset}`);
-        range = document.createRange();
-        range.setStart(endNode, offset);
-
-        document.getSelection().removeAllRanges();
-        document.getSelection().addRange(range);
-      }
-    } */
-  }
-  /*   onBlur(event) {
-    if (event.target.parentNode !== document.activeElement) {
-      this.code = event.target.innerText;
-      //ddddddddddddddddddddddddddddd
-      hljs.highlightBlock(event.target);
-
-      this.editable = false;
-    }
-  } */
+  onKeyUp(event) {}
 
   getCursor(node, preText: string, text: string) {
     if (node.nodeType == 3 || (<Element>node).tagName.toLowerCase() == 'br') {
@@ -141,7 +93,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
   save(el) {
     this.loading = true;
     if (el.innerText.length == 0 || el.innerText === '\n') {
-      el.innerText = placeholderText;
+      //el.innerText = placeholderText;
     }
     this.code = el.innerText;
     let params = new HttpParams();
@@ -156,14 +108,9 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
         result => {
           this.code = result['formatted'];
           el.innerText = this.code;
-          //hljs.highlightBlock(el);
-          /*           let converted = hljs.highlightAuto(el.textContent);
-          (<Element>el).innerHTML = converted.value;
-          console.log(converted.value); */
 
           hljs.highlightBlock(el);
           this.loading = false;
-          this.toggleEditable(el);
         },
         error => {
           console.log(JSON.stringify(error));

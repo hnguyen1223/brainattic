@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { NotesService } from '../notes.service';
-import { Observable } from 'rxjs';
+import { Component, OnInit, Input } from '@angular/core';
 import { Note } from '../model/note';
 
 @Component({
@@ -9,19 +7,23 @@ import { Note } from '../model/note';
   styleUrls: ['./note.component.scss']
 })
 export class NoteComponent implements OnInit {
-  private notes: Observable<{ id: string; note: Note }[]>;
+  @Input() note: Note;
+  @Input() editable: boolean;
+  hover: false;
 
-  constructor(private notesService: NotesService) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.notes = this.notesService.notes;
+  ngOnInit() {}
+
+  addSnippet(i) {
+    if (i) {
+      this.note.content.splice(i + 1, 0, { text: '', type: 3 });
+    } else this.note.content.push({ text: '', type: 3 });
   }
 
-  deleteNote(note: Note) {
-    this.notesService.deleteNote(note);
-  }
-
-  updateNote(note) {
-    this.notesService.updateNote(note);
+  addText(i) {
+    if (i) {
+      this.note.content.splice(i + 1, 0, { text: '', type: 1 });
+    } else this.note.content.push({ text: '', type: 1 });
   }
 }

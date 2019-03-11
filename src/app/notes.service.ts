@@ -5,47 +5,66 @@ import { BehaviorSubject, Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   AngularFirestore,
-  AngularFirestoreCollection
+  AngularFirestoreCollection,
+  DocumentChangeAction,
+  DocumentReference
 } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotesService {
-  private _notes: BehaviorSubject<Note[]> = new BehaviorSubject(NOTES_MOCK);
-  private notesCollection: AngularFirestoreCollection<Note>;
-  public notes: Observable<{ id: string; note: Note }[]>;
+  private _notesCollection: AngularFirestoreCollection<Note>;
+  private _notesWithMeta: Observable<DocumentChangeAction<Note>[]>;
+  private _notes: BehaviorSubject<Note[]> = new BehaviorSubject([]);
+  public notes: Observable<Note[]> = this._notes.asObservable();
 
   constructor(private db: AngularFirestore) {
-    this.notesCollection = db
+    this._notesCollection = db
       .collection('users')
       .doc('KkW3rw28unKqoOyAlJZc')
-      .collection<Note>('Notes');
-    this.notes = this.notesCollection.snapshotChanges().pipe(
-      map(a => {
-        return a.map(i => {
-          return {
-            id: i.payload.doc.id,
-            note: i.payload.doc.data()
-          };
-        });
-      })
-    );
+      .collection<Note>('Notes', ref => ref.orderBy('modified', 'desc'));
+    this._notesCollection.stateChanges().subscribe(changeList => {
+      console.log(changeList);
+      this.updateNotes(changeList);
+    });
   }
 
   getNote(id: string) {
-    return this.notesCollection.doc<Note>(id).valueChanges();
+    return this._notesCollection.doc<Note>(id).valueChanges();
   }
 
-  addNote(note: Note): Observable<any> {
-    return from(this.notesCollection.add(note));
+  addNote(note: Note): Observable<DocumentReference> {
+    return from(this._notesCollection.add(note));
   }
 
-  deleteNote(note: Note): Observable<any> {
-    return from(this.notesCollection.doc(note.id).delete());
+  deleteNote(note: Note): Observable<void> {
+    return from(this._notesCollection.doc(note.id).delete());
   }
 
-  updateNote(note: Note): Observable<any> {
-    return from(this.notesCollection.doc(note.id).update(note));
+  updateNote(note: Note): Observable<void> {
+    return from(this._notesCollection.doc(note.id).update(note));
+  }
+
+  private updateNotes(changeList: DocumentChangeAction<Note>[]) {
+    let currentList = this._notes.getValue();
+    let newList = changeList.map(i => i.payload);
+    newList.forEach(change => {
+      if (change.type == 'added') {
+        currentList.push(change.doc.data());
+        currentList[currentList.length - 1].id = change.doc.id;
+        //currentList[currentList.length - 1].content.push({ text: '', type: 1 });
+      } else if (change.type == 'modified') {
+        let index = currentList.indexOf(
+          currentList.find(item => item.id == change.doc.id)
+        );
+        currentList[index] = change.doc.data() as Note;
+        currentList[index].id = change.doc.id;
+        //currentList[index].content.push({ text: '', type: 1 });
+      } else {
+        let temp = currentList.find(item => item.id == change.doc.id);
+        currentList.splice(currentList.indexOf(temp), 1);
+      }
+    });
   }
 }

@@ -1,15 +1,58 @@
-.note {
-  //border: 1px solid black;
-  background-color: lightblue;
-  margin-bottom: 10px;
+div.note {
+  width: 400px;
+  padding: 15px 15px 20px 15px;
+  //box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border-radius: 5px;
-  break-inside: avoid;
+  border: 1px solid rgb(218, 218, 218);
+  background-color: #DAE3E5;
 }
 
-.container{
-  column-count: 3;
+.title{
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
-app-code-snippet{
-  width: 100%;
+.content-container {
+  max-height: 500px;
+  overflow: visible;
+  padding: 6px;
+}
+.meta {
+  position: absolute;
+  right: 15px;
+  bottom: 5px;
+  margin-bottom: 0px;
+  font-size: 0.9em;
+}
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+}
+
+.new-line {
+  line-height: 2em;
+  min-width: 0;
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+  position: absolute;
+  left: -25px;
+  bottom: -1em;
+}
+
+.new-line:hover mat-icon {
+  transform: rotate(90deg);
+}
+
+/* .new-line:hover {
+  height: 2em;
+  background-color: white;
+} */
+/* .new-line:hover {
+  position: absolute;
+  left: -50px;
+  top: -10px;
+} */
+
+.snippet-container {
+  position: relative;
 }
