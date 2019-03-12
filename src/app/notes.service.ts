@@ -21,11 +21,11 @@ export class NotesService {
   constructor(private db: AngularFirestore) {
     this._notesCollection = db
       .collection('users')
-      .doc('KkW3rw28unKqoOyAlJZc')
+      .doc('y4jLBH7HqXgJB5sM6IJTzTlNoVi2')
       .collection<Note>('Notes', ref => ref.orderBy('modified', 'desc'));
     this._notesCollection.stateChanges().subscribe(changeList => {
       console.log(changeList);
-      this.updateNotes(changeList);
+      this.updateList(changeList);
     });
   }
 
@@ -34,7 +34,9 @@ export class NotesService {
   }
 
   addNote(note: Note): Observable<DocumentReference> {
-    return from(this._notesCollection.add(note));
+    let tempNote: Note = JSON.parse(JSON.stringify(note));
+    delete tempNote.id;
+    return from(this._notesCollection.add(tempNote));
   }
 
   deleteNote(note: Note): Observable<void> {
@@ -42,10 +44,12 @@ export class NotesService {
   }
 
   updateNote(note: Note): Observable<void> {
-    return from(this._notesCollection.doc(note.id).update(note));
+    let tempNote: Note = JSON.parse(JSON.stringify(note));
+    delete tempNote.id;
+    return from(this._notesCollection.doc(note.id).update(tempNote));
   }
 
-  private updateNotes(changeList: DocumentChangeAction<Note>[]) {
+  private updateList(changeList: DocumentChangeAction<Note>[]) {
     let currentList = this._notes.getValue();
     let newList = changeList.map(i => i.payload);
     newList.forEach(change => {
@@ -66,4 +70,14 @@ export class NotesService {
       }
     });
   }
+  /* 
+    moveUser() {
+      this.notes.subscribe(list => {
+        //this.db.collection('users').doc('y4jLBH7HqXgJB5sM6IJTzTlNoVi2').set({name: 'Huy Nguyen'});
+        list.forEach(item => {
+  
+          this.db.collection('users').doc('y4jLBH7HqXgJB5sM6IJTzTlNoVi2').collection('Notes').doc(item.id).set(item);
+        })
+      })
+    } */
 }

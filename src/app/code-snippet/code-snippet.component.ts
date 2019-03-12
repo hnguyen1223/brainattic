@@ -4,7 +4,9 @@ import {
   Input,
   ViewChild,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import hljs from 'highlight.js';
@@ -20,16 +22,18 @@ const placeholderText = '// Code goes here';
 export class CodeSnippetComponent implements OnInit, AfterViewInit {
   @ViewChild('snippet', { read: ElementRef }) snippet: ElementRef;
   @Input() code: string;
-
   @Input() editable: boolean = false;
-  loading: boolean = true;
-  isCopied: boolean = false;
-  constructor(private http: HttpClient) {}
+  @Output() edited: EventEmitter<string> = new EventEmitter();
+
+  private loading: boolean = true;
+  private isCopied: boolean = false;
+
+  constructor(private http: HttpClient) { }
   counter = 0;
 
   ngOnInit() {
     feather.replace({ color: 'red' });
-    this.snippet.nativeElement.addEventListener('paste', function(e) {
+    this.snippet.nativeElement.addEventListener('paste', function (e) {
       e.preventDefault();
       // get text representation of clipboard
       var text = (e.originalEvent || e).clipboardData.getData('text/plain');
@@ -74,7 +78,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onKeyUp(event) {}
+  onKeyUp(event) { }
 
   getCursor(node, preText: string, text: string) {
     if (node.nodeType == 3 || (<Element>node).tagName.toLowerCase() == 'br') {
@@ -114,6 +118,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
 
           hljs.highlightBlock(el);
           this.loading = false;
+          this.edited.emit(this.code);
         },
         error => {
           console.log(JSON.stringify(error));
@@ -129,9 +134,8 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
         ? document.getSelection().getRangeAt(0)
         : false;
     let newRange = document.createRange();
-    newRange.selectNode(element);
     document.getSelection().removeAllRanges();
-    document.getSelection().addRange(newRange);
+    document.getSelection().selectAllChildren(element)
     document.execCommand('copy');
     document.getSelection().removeAllRanges();
 
@@ -148,6 +152,6 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
       this.isCopied = false;
     }, 2000);
   }
-  deleteSnippet(element){
+  deleteSnippet(element) {
   }
 }

@@ -11,9 +11,9 @@ export class NoteComponent implements OnInit {
   @Input() editable: boolean;
   hover: false;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   addSnippet(i) {
     if (i) {
@@ -25,5 +25,13 @@ export class NoteComponent implements OnInit {
     if (i) {
       this.note.content.splice(i + 1, 0, { text: '', type: 1 });
     } else this.note.content.push({ text: '', type: 1 });
+  }
+
+  addContent(i) {
+    if (this.note.content[i].type == 3)
+      this.note.content.splice(i + 1, 0, { text: '', type: 1 });
+    else
+      this.note.content.splice(i + 1, 0, { text: '', type: 3 });
+
   }
 }

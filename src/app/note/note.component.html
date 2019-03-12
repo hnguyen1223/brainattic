@@ -1,20 +1,17 @@
 <div class="note">
   <!--   <button mat-raised-button (click)="addSnippet()">add</button> -->
   <div class="title" contenteditable="">{{ note.title }}</div>
-  <div class="content-container">
+  <div class="content-container" [style.overflow] = "editable? visible: hidden">
     <div class="wrapper" *ngFor="let item of note.content; let i = index">
-      <div class="text" *ngIf="item.type == 1" contenteditable="editable">
+      <div class="text" *ngIf="item.type == 1" [attr.contenteditable]="editable">
         {{ item.text }}
       </div>
-      <div class="link" *ngIf="item.type == 2" contenteditable="editable">
+      <div class="link" *ngIf="item.type == 2" [attr.contenteditable]="editable">
         {{ item.text }}
       </div>
-      <app-code-snippet
-        [code]="item.text"
-        [editable]="true"
-        *ngIf="item.type == 3"
-      ></app-code-snippet>
-      <button mat-button class="new-line" *ngIf="editable" (click)="addText(i)">
+      <app-code-snippet [code]="item.text" [editable]="editable" *ngIf="item.type == 3" (edited)="item.text = $event">
+      </app-code-snippet>
+      <button mat-button class="new-line" *ngIf="editable" (click)="addContent(i)" matTooltip="insert">
         <mat-icon>arrow_right</mat-icon>
       </button>
     </div>
