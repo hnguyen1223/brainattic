@@ -1,6 +1,5 @@
 div.note {
-  width: 400px;
-  padding: 15px 15px 20px 15px;
+  padding: 15px 15px 15px 15px;
   //box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border-radius: 5px;
@@ -9,21 +8,29 @@ div.note {
 }
 
 .title {
+  margin-bottom: 10px;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.5em;
 }
 
 .content-container {
-/*   max-height: 500px;
-  overflow: visible; */
-  padding: 6px;
+  margin-top: 10px;
+  /*   max-height: 500px; */
+  /*overflow: visible; */
 }
 .meta {
-  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  span {
+    flex: 1 0 auto;
+    text-align: right;
+  }
+  /*   position: absolute;
   right: 15px;
   bottom: 5px;
   margin-bottom: 0px;
-  font-size: 0.9em;
+  font-size: 0.9em; */
 }
 [contenteditable]:focus {
   outline: 0px solid transparent;
@@ -55,4 +62,26 @@ div.note {
 
 .wrapper {
   position: relative;
+}
+
+.drag-handle {
+  position: absolute;
+  left: -18px;
+  font-size: 20px;
+  border-radius: 3px;
+  &:hover {
+    cursor: move;
+    opacity: 0.5;
+  }
+}
+.lower {
+  top: 10px;
+}
+
+.action-bar button {
+  margin-right: 5px;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
 }

@@ -8,8 +8,11 @@ import {
   MatIconModule,
   MatTooltipModule,
   MatProgressBarModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatChipsModule,
+  MatDividerModule
 } from '@angular/material';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [],
@@ -21,7 +24,10 @@ import {
     MatIconModule,
     MatTooltipModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DragDropModule,
+    MatChipsModule,
+    MatDividerModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -30,7 +36,10 @@ import {
     MatIconModule,
     MatTooltipModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DragDropModule,
+    MatChipsModule,
+    MatDividerModule
   ]
 })
 export class AngularMaterialModule {}

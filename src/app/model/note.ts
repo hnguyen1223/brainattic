@@ -1,3 +1,5 @@
+import { chunk } from './chunk';
+
 export interface Note {
   id: string;
   title: string;
@@ -5,10 +7,7 @@ export interface Note {
   modified: Date;
   tags: string[];
   fav: boolean;
-  content: {
-    text: string;
-    type: number;
-  }[];
+  content: chunk[];
 }
 
 export const TextTypes = {

@@ -11,6 +11,7 @@ import * as Isotope from 'isotope-layout';
 })
 export class NotesContainerComponent implements OnInit {
   private notes: Observable<Note[]>;
+  private editable: boolean = false;
   @ViewChild('grid') grid: ElementRef;
 
   constructor(private notesService: NotesService) {}

@@ -1,5 +1,6 @@
+<button mat-raised-button (click)="editable = !editable">toggle</button>
 <ngx-masonry class="container grid" #grid [useImagesLoaded]="true" [options]="{ gutter: 15 }">
   <app-note ngxMasonryItem class="note grid-item" *ngFor="let note of (notes | async)" [note]="note"
-    (click)="editNote($event.target)" [editable]="true">
+    (click)="editNote($event.target)" [editable]="editable">
   </app-note>
 </ngx-masonry>

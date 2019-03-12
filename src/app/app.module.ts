@@ -18,13 +18,17 @@ import {
   FirestoreSettingsToken
 } from '@angular/fire/firestore';
 import { NotesContainerComponent } from './notes-container/notes-container.component';
+import { ChunkComponent } from './chunk/chunk.component';
+import { LinkSnippetComponent } from './link-snippet/link-snippet.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CodeSnippetComponent,
     NoteComponent,
-    NotesContainerComponent
+    NotesContainerComponent,
+    ChunkComponent,
+    LinkSnippetComponent
   ],
   imports: [
     BrowserModule,

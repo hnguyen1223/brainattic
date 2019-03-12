@@ -1,6 +1,6 @@
 import { TextTypes, Note } from './note';
 
-export let NOTES_MOCK: Note[] = [
+export let NOTES_MOCK: Note[] = [/* 
   {
     id: "1",
     title: 'Dependency Injection in Angular',
@@ -86,5 +86,5 @@ export let NOTES_MOCK: Note[] = [
         type: TextTypes.CODE
       }
     ]
-  }
+  } */
 ];

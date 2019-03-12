@@ -11,6 +11,7 @@ import {
 import { HttpClient, HttpParams } from '@angular/common/http';
 import hljs from 'highlight.js';
 import * as feather from 'feather-icons/';
+import { chunk } from '../model/chunk';
 
 const placeholderText = '// Code goes here';
 
@@ -21,19 +22,21 @@ const placeholderText = '// Code goes here';
 })
 export class CodeSnippetComponent implements OnInit, AfterViewInit {
   @ViewChild('snippet', { read: ElementRef }) snippet: ElementRef;
-  @Input() code: string;
+  @Input() chunk: chunk;
   @Input() editable: boolean = false;
-  @Output() edited: EventEmitter<string> = new EventEmitter();
+  @Input() collapsed: boolean = false;
+  @Output() edited: EventEmitter<chunk> = new EventEmitter();
+  @Output() removed: EventEmitter<chunk> = new EventEmitter();
 
   private loading: boolean = true;
   private isCopied: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   counter = 0;
 
   ngOnInit() {
     feather.replace({ color: 'red' });
-    this.snippet.nativeElement.addEventListener('paste', function (e) {
+    this.snippet.nativeElement.addEventListener('paste', function(e) {
       e.preventDefault();
       // get text representation of clipboard
       var text = (e.originalEvent || e).clipboardData.getData('text/plain');
@@ -78,7 +81,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onKeyUp(event) { }
+  onKeyUp(event) {}
 
   getCursor(node, preText: string, text: string) {
     if (node.nodeType == 3 || (<Element>node).tagName.toLowerCase() == 'br') {
@@ -102,9 +105,9 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     if (el.innerText.length == 0 || el.innerText === '\n') {
       //el.innerText = placeholderText;
     }
-    this.code = el.innerText;
+    this.chunk.text = el.innerText;
     let params = new HttpParams();
-    params = params.append('string', this.code);
+    params = params.append('string', this.chunk.text);
     params = params.append('cursor', '1');
     params = params.append('parser', 'css');
     this.http
@@ -113,12 +116,12 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
       })
       .subscribe(
         result => {
-          this.code = result['formatted'];
-          el.innerText = this.code;
+          this.chunk.text = result['formatted'];
+          el.innerText = this.chunk.text;
 
           hljs.highlightBlock(el);
           this.loading = false;
-          this.edited.emit(this.code);
+          this.edited.emit(this.chunk);
         },
         error => {
           console.log(JSON.stringify(error));
@@ -133,9 +136,8 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
       document.getSelection().rangeCount > 0
         ? document.getSelection().getRangeAt(0)
         : false;
-    let newRange = document.createRange();
     document.getSelection().removeAllRanges();
-    document.getSelection().selectAllChildren(element)
+    document.getSelection().selectAllChildren(element);
     document.execCommand('copy');
     document.getSelection().removeAllRanges();
 
@@ -152,6 +154,12 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
       this.isCopied = false;
     }, 2000);
   }
-  deleteSnippet(element) {
+  deleteSnippet(element) {}
+
+  toggleCollapsed() {
+    this.collapsed = !this.collapsed;
+  }
+  remove() {
+    this.removed.emit(this.chunk);
   }
 }

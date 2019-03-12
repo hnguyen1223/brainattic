@@ -2,26 +2,43 @@
   outline: 0px solid transparent;
 }
 
-.snippet-action-bar {
-  display: flex;
-  opacity: 0;
-  flex-direction: row;
-  position: absolute;
-  right: 10px;
-  top: 10px;
+.action-bar {
+  flex: 0 1 auto;
   transition: opacity 0.3s ease-in-out;
 }
-.snippet-action-bar button {
-  margin: 0 0.2em 0.2em 0;
+.action-bar button {
+  margin: 0.2em;
   min-width: 0;
-  width: 40px;
-  height: 40px;
-  font-size: 0.8em;
-  align-items: center;
-  padding: 0 !important;
+  width: 30px;
+  padding: 0px !important;
 }
 
-pre {
+.name {
+  flex: 1 0 auto;
+}
+
+.code-wrapper {
+  margin: 0px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.small-icon {
+  width: 20px;
+  height: 20px;
+}
+
+code {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.raised {
+  box-shadow: 0 14px 28px rgba(0, 36, 102, 0.25),
+    0 10px 10px rgba(0, 36, 102, 0.22);
+}
+
+.container {
   font-size: 1.2em;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -30,24 +47,31 @@ pre {
   border-radius: 5px;
 }
 
-code {
-  border-radius: 5px;
-  //background-color: rgb(237, 243, 255) !important;
-}
-
-pre:hover .snippet-action-bar {
-  opacity: 1;
-}
-
-.raised {
-  box-shadow: 0 14px 28px rgba(0, 36, 102, 0.25),
-    0 10px 10px rgba(0, 36, 102, 0.22);
-}
-
-.wrapper {
-}
-
-.fill-green{
+.fill-green {
   color: green;
   stroke-width: 3px;
+}
+
+.header {
+  background-color: #C1D5EB;
+  overflow: visible;
+  height: 2em;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding-right: 10px;
+}
+
+.arrow {
+  flex: 0 0 auto;
+  user-select: none;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.collapsed {
+  display: none;
 }
