@@ -8,3 +8,7 @@
 body {
   font-family: 'Source Sans Pro', sans-serif;
 }
+
+[spellcheck]:focus {
+  outline: 0px solid transparent;
+}
