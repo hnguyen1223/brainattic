@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Note } from '../model/note';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { chunk } from '../model/chunk';
+import { Chunk } from '../model/chunk';
 
 @Component({
   selector: 'app-note',
@@ -44,7 +44,7 @@ export class NoteComponent implements OnInit {
     this.note.content.splice(i, 1);
   }
 
-  drop(event: CdkDragDrop<chunk[]>) {
+  drop(event: CdkDragDrop<Chunk[]>) {
     moveItemInArray(this.note.content, event.previousIndex, event.currentIndex);
   }
 }

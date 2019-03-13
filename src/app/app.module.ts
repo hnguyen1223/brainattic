@@ -20,6 +20,7 @@ import {
 import { NotesContainerComponent } from './notes-container/notes-container.component';
 import { ChunkComponent } from './chunk/chunk.component';
 import { LinkSnippetComponent } from './link-snippet/link-snippet.component';
+import { TopBarComponent } from './top-bar/top-bar.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { LinkSnippetComponent } from './link-snippet/link-snippet.component';
     NoteComponent,
     NotesContainerComponent,
     ChunkComponent,
-    LinkSnippetComponent
+    LinkSnippetComponent,
+    TopBarComponent
   ],
   imports: [
     BrowserModule,

@@ -11,7 +11,7 @@ import {
 import { HttpClient, HttpParams } from '@angular/common/http';
 import hljs from 'highlight.js';
 import * as feather from 'feather-icons/';
-import { chunk } from '../model/chunk';
+import { Chunk } from '../model/chunk';
 
 const placeholderText = '// Code goes here';
 
@@ -22,11 +22,11 @@ const placeholderText = '// Code goes here';
 })
 export class CodeSnippetComponent implements OnInit, AfterViewInit {
   @ViewChild('snippet', { read: ElementRef }) snippet: ElementRef;
-  @Input() chunk: chunk;
+  @Input() chunk: Chunk;
   @Input() editable: boolean = false;
   @Input() collapsed: boolean = false;
-  @Output() edited: EventEmitter<chunk> = new EventEmitter();
-  @Output() removed: EventEmitter<chunk> = new EventEmitter();
+  @Output() edited: EventEmitter<Chunk> = new EventEmitter();
+  @Output() removed: EventEmitter<Chunk> = new EventEmitter();
 
   private loading: boolean = true;
   private isCopied: boolean = false;
@@ -36,13 +36,15 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     feather.replace({ color: 'red' });
-    this.snippet.nativeElement.addEventListener('paste', function(e) {
-      e.preventDefault();
-      // get text representation of clipboard
-      var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-      // insert text manually
-      document.execCommand('insertHTML', false, text);
-    });
+    if (this.snippet) {
+      this.snippet.nativeElement.addEventListener('paste', function(e) {
+        e.preventDefault();
+        // get text representation of clipboard
+        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        // insert text manually
+        document.execCommand('insertHTML', false, text);
+      });
+    }
   }
 
   ngAfterViewInit() {

@@ -1,4 +1,4 @@
-import { chunk } from './chunk';
+import { Chunk } from './chunk';
 
 export interface Note {
   id: string;
@@ -7,7 +7,7 @@ export interface Note {
   modified: Date;
   tags: string[];
   fav: boolean;
-  content: chunk[];
+  content: Chunk[];
 }
 
 export const TextTypes = {

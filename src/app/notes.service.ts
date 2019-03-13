@@ -16,7 +16,11 @@ export class NotesService {
   private _notesCollection: AngularFirestoreCollection<Note>;
   private _notesWithMeta: Observable<DocumentChangeAction<Note>[]>;
   private _notes: BehaviorSubject<Note[]> = new BehaviorSubject([]);
+  private _filteredNotes: BehaviorSubject<Note[]> = new BehaviorSubject([]);
+  private _tags: BehaviorSubject<string[]> = new BehaviorSubject([]);
   public notes: Observable<Note[]> = this._notes.asObservable();
+  public filteredNotes: Observable<Note[]> = this._filteredNotes.asObservable();
+  public tags: Observable<string[]> = this._tags.asObservable();
 
   constructor(private db: AngularFirestore) {
     this._notesCollection = db
@@ -69,6 +73,26 @@ export class NotesService {
         currentList.splice(currentList.indexOf(temp), 1);
       }
     });
+  }
+
+  getFilteredTags(): Observable<Note[]> {
+    return this.filteredNotes;
+  }
+
+  getTags(): Observable<string[]> {
+    return this.tags;
+  }
+
+  addTag(tag: string) {
+    this._tags.next(
+      this._tags.getValue().splice(this._tags.getValue().length, 0, tag)
+    );
+
+  }
+
+  removeTag(tag: string) {
+    let index = this._tags.getValue().indexOf(tag);
+    if (index > 0) this._tags.next(this._tags.getValue().splice(index, 1));
   }
   /* 
     moveUser() {
