@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CodeSnippetComponent } from './code-snippet/code-snippet.component';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoteComponent } from './note/note.component';
 import { NotesService } from './notes.service';
 import { AngularFireModule } from '@angular/fire';
@@ -37,6 +38,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     AppRoutingModule,
     AngularMaterialModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     OverlayModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
@@ -46,4 +49,4 @@ import { TopBarComponent } from './top-bar/top-bar.component';
   providers: [NotesService, { provide: FirestoreSettingsToken, useValue: {} }], //until timestampsInSnapshots is removed  https://github.com/angular/angularfire2/issues/1993
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

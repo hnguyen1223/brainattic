@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Note } from './model/note';
 import { BehaviorSubject, Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, combineLatest } from 'rxjs/operators';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -14,13 +14,17 @@ import {
 })
 export class NotesService {
   private _notesCollection: AngularFirestoreCollection<Note>;
-  private _notesWithMeta: Observable<DocumentChangeAction<Note>[]>;
   private _notes: BehaviorSubject<Note[]> = new BehaviorSubject([]);
   private _filteredNotes: BehaviorSubject<Note[]> = new BehaviorSubject([]);
-  private _tags: BehaviorSubject<string[]> = new BehaviorSubject([]);
+
+  private allTags: Observable<Set<string>>;
+  private _chosenTags: BehaviorSubject<Set<string>> = new BehaviorSubject(new Set());
+  private _filteredTags: BehaviorSubject<Set<string>> = new BehaviorSubject(new Set())
+
   public notes: Observable<Note[]> = this._notes.asObservable();
   public filteredNotes: Observable<Note[]> = this._filteredNotes.asObservable();
-  public tags: Observable<string[]> = this._tags.asObservable();
+  public chosenTags: Observable<Set<string>> = this._chosenTags.asObservable();
+  public filteredTags: Observable<Set<string>> = this._filteredTags.asObservable();
 
   constructor(private db: AngularFirestore) {
     this._notesCollection = db
@@ -31,6 +35,10 @@ export class NotesService {
       console.log(changeList);
       this.updateList(changeList);
     });
+    this.allTags = this.notes.pipe(map(list => {
+      let set = new Set(list.flatMap(item => item.tags));
+      return set;
+    }));
   }
 
   getNote(id: string) {
@@ -75,24 +83,33 @@ export class NotesService {
     });
   }
 
-  getFilteredTags(): Observable<Note[]> {
+  getFilteredNotes(): Observable<Note[]> {
     return this.filteredNotes;
   }
 
-  getTags(): Observable<string[]> {
-    return this.tags;
+  //For autocomplete
+  getFilteredTags(): Observable<Set<string>> {
+    return this.filteredTags;
+  }
+
+  filter(word: string) {
+  }
+
+
+  getTags(): Observable<Set<string>> {
+    return this.chosenTags;
   }
 
   addTag(tag: string) {
-    this._tags.next(
-      this._tags.getValue().splice(this._tags.getValue().length, 0, tag)
+    this._chosenTags.next(
+      this._chosenTags.getValue().splice(this._chosenTags.getValue().length, 0, tag)
     );
 
   }
 
   removeTag(tag: string) {
-    let index = this._tags.getValue().indexOf(tag);
-    if (index > 0) this._tags.next(this._tags.getValue().splice(index, 1));
+    let index = this._chosenTags.getValue().indexOf(tag);
+    if (index > 0) this._chosenTags.next(this._chosenTags.getValue().splice(index, 1));
   }
   /* 
     moveUser() {

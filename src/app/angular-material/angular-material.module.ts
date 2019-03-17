@@ -10,7 +10,9 @@ import {
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatChipsModule,
-  MatDividerModule
+  MatDividerModule,
+  MatAutocompleteModule,
+  MatFormFieldModule
 } from '@angular/material';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 
@@ -27,7 +29,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatProgressSpinnerModule,
     DragDropModule,
     MatChipsModule,
-    MatDividerModule
+    MatDividerModule,
+    MatAutocompleteModule,
+    MatFormFieldModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -39,7 +43,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatProgressSpinnerModule,
     DragDropModule,
     MatChipsModule,
-    MatDividerModule
+    MatDividerModule,
+    MatAutocompleteModule,
+    MatFormFieldModule
   ]
 })
 export class AngularMaterialModule {}

@@ -15,7 +15,7 @@ export class TopBarComponent implements OnInit {
   filteredTags: Observable<string[]>;
   tags: string[];
 
-  @ViewChild('search-box') searchBox: ElementRef<HTMLInputElement>;
+  @ViewChild('searchBox') searchBox: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
   
   constructor(private NotesService: NotesService) {}
