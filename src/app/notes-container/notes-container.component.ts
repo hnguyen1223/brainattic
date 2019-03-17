@@ -17,7 +17,7 @@ export class NotesContainerComponent implements OnInit {
   constructor(private notesService: NotesService) {}
 
   ngOnInit() {
-    this.notes = this.notesService.notes;
+    this.notes = this.notesService.filteredNotes;
   }
 
   deleteNote(note: Note) {

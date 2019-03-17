@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Note } from './model/note';
-import { BehaviorSubject, Observable, from } from 'rxjs';
-import { map, combineLatest } from 'rxjs/operators';
+import { BehaviorSubject, Observable, from, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -13,32 +13,42 @@ import {
   providedIn: 'root'
 })
 export class NotesService {
-  private _notesCollection: AngularFirestoreCollection<Note>;
-  private _notes: BehaviorSubject<Note[]> = new BehaviorSubject([]);
-  private _filteredNotes: BehaviorSubject<Note[]> = new BehaviorSubject([]);
+  private _notesCollection: AngularFirestoreCollection<Note>; //Firestore db
+  private _allNotes: BehaviorSubject<Note[]> = new BehaviorSubject([]); // All notes source
+  private allTags: Observable<Set<string>>; // all tags source
+  private _chosenTags: BehaviorSubject<Set<string>> = new BehaviorSubject(
+    new Set()
+  ); // user chosen tags source
 
-  private allTags: Observable<Set<string>>;
-  private _chosenTags: BehaviorSubject<Set<string>> = new BehaviorSubject(new Set());
-  private _filteredTags: BehaviorSubject<Set<string>> = new BehaviorSubject(new Set())
-
-  public notes: Observable<Note[]> = this._notes.asObservable();
-  public filteredNotes: Observable<Note[]> = this._filteredNotes.asObservable();
+  public allNotes: Observable<Note[]> = this._allNotes.asObservable();
+  public filteredNotes: Observable<Note[]>;
   public chosenTags: Observable<Set<string>> = this._chosenTags.asObservable();
-  public filteredTags: Observable<Set<string>> = this._filteredTags.asObservable();
 
   constructor(private db: AngularFirestore) {
     this._notesCollection = db
       .collection('users')
       .doc('y4jLBH7HqXgJB5sM6IJTzTlNoVi2')
       .collection<Note>('Notes', ref => ref.orderBy('modified', 'desc'));
+
     this._notesCollection.stateChanges().subscribe(changeList => {
       console.log(changeList);
       this.updateList(changeList);
     });
-    this.allTags = this.notes.pipe(map(list => {
-      let set = new Set(list.flatMap(item => item.tags));
-      return set;
-    }));
+
+    this.allTags = this.allNotes.pipe(
+      map(list => {
+        let set = new Set(list.flatMap(item => item.tags));
+        return set;
+      })
+    );
+
+    this.filteredNotes = combineLatest(this._allNotes, this._chosenTags).pipe(
+      map(([notesArray, tagSet]) =>
+        notesArray.filter(note =>
+          Array.from(tagSet).every(tag => note.tags.indexOf(tag) != -1)
+        )
+      )
+    );
   }
 
   getNote(id: string) {
@@ -62,7 +72,7 @@ export class NotesService {
   }
 
   private updateList(changeList: DocumentChangeAction<Note>[]) {
-    let currentList = this._notes.getValue();
+    let currentList = this._allNotes.getValue();
     let newList = changeList.map(i => i.payload);
     newList.forEach(change => {
       if (change.type == 'added') {
@@ -81,6 +91,7 @@ export class NotesService {
         currentList.splice(currentList.indexOf(temp), 1);
       }
     });
+    this._allNotes.next(currentList);
   }
 
   getFilteredNotes(): Observable<Note[]> {
@@ -88,28 +99,26 @@ export class NotesService {
   }
 
   //For autocomplete
-  getFilteredTags(): Observable<Set<string>> {
-    return this.filteredTags;
+  getFilteredTags(source: Observable<string>): Observable<string[]> {
+    return combineLatest(source, this.allTags).pipe(
+      map(([word, tagSet]) => {
+        return Array.from(tagSet).filter(tag => tag.indexOf(word) === 0);
+      })
+    );
   }
-
-  filter(word: string) {
-  }
-
 
   getTags(): Observable<Set<string>> {
     return this.chosenTags;
   }
 
   addTag(tag: string) {
-    this._chosenTags.next(
-      this._chosenTags.getValue().splice(this._chosenTags.getValue().length, 0, tag)
-    );
-
+    this._chosenTags.next(this._chosenTags.getValue().add(tag));
   }
 
   removeTag(tag: string) {
-    let index = this._chosenTags.getValue().indexOf(tag);
-    if (index > 0) this._chosenTags.next(this._chosenTags.getValue().splice(index, 1));
+    let set = this._chosenTags.getValue();
+    set.delete(tag);
+    this._chosenTags.next(set);
   }
   /* 
     moveUser() {

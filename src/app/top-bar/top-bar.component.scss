@@ -1,0 +1,16 @@
+input {
+}
+
+.container{
+    width: 100%;
+    display: flex;
+}
+
+.search-bar{
+    flex: 3 1 auto;
+}
+
+mat-form-field{
+    width: 100%;
+}
+
