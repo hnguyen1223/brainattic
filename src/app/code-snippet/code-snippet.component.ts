@@ -12,6 +12,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import hljs from 'highlight.js';
 import * as feather from 'feather-icons/';
 import { Chunk } from '../model/chunk';
+import { UistateService } from '../uistate.service';
+import { Observable } from 'rxjs';
 
 const placeholderText = '// Code goes here';
 
@@ -24,14 +26,17 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
   @ViewChild('snippet', { read: ElementRef }) snippet: ElementRef;
   @Input() chunk: Chunk;
   @Input() editable: boolean = false;
-  @Input() collapsed: boolean = false;
   @Output() edited: EventEmitter<Chunk> = new EventEmitter();
   @Output() removed: EventEmitter<Chunk> = new EventEmitter();
 
   private loading: boolean = true;
   private isCopied: boolean = false;
+  collapsed: Boolean;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private uiStateService: UistateService
+  ) {}
   counter = 0;
 
   ngOnInit() {
@@ -45,6 +50,9 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
         document.execCommand('insertHTML', false, text);
       });
     }
+    this.uiStateService.collapsed.subscribe(
+      isCollapsed => (this.collapsed = isCollapsed)
+    );
   }
 
   ngAfterViewInit() {
@@ -133,7 +141,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
       );
   }
 
-  copyToClipboard(element: Element) {
+  copyToClipboard(event: Event, element: Element) {
     const selected =
       document.getSelection().rangeCount > 0
         ? document.getSelection().getRangeAt(0)
@@ -155,12 +163,14 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.isCopied = false;
     }, 2000);
+    event.stopPropagation();
   }
-  deleteSnippet(element) {}
 
   toggleCollapsed() {
     this.collapsed = !this.collapsed;
   }
+  deleteSnippet(element) {}
+
   remove() {
     this.removed.emit(this.chunk);
   }

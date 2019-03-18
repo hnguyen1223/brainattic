@@ -12,3 +12,14 @@ body {
 [spellcheck]:focus {
   outline: 0px solid transparent;
 }
+
+.custom-dialog-container .mat-dialog-container {
+  padding: 0px;
+  background-color: transparent;
+}
+
+.custom-dialog-container .mat-dialog-content{
+  padding: 0px;
+  margin: 0px;
+  max-height: 95vh;
+}

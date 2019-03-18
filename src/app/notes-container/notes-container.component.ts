@@ -1,8 +1,19 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Inject
+} from '@angular/core';
 import { NotesService } from '../notes.service';
 import { Observable } from 'rxjs';
 import { Note } from '../model/note';
 import * as Isotope from 'isotope-layout';
+import { UistateService } from '../uistate.service';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { NoteComponent } from '../note/note.component';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { NoteEditorComponent } from '../note-editor/note-editor.component';
 
 @Component({
   selector: 'app-notes-container',
@@ -14,7 +25,11 @@ export class NotesContainerComponent implements OnInit {
   private editable: boolean = false;
   @ViewChild('grid') grid: ElementRef;
 
-  constructor(private notesService: NotesService) {}
+  constructor(
+    private notesService: NotesService,
+    private uiStateService: UistateService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.notes = this.notesService.filteredNotes;
@@ -28,6 +43,16 @@ export class NotesContainerComponent implements OnInit {
     this.notesService.updateNote(note);
   }
 
-  editNote(element) {
+  editNote(note: Note) {
+    const dialogRef = this.dialog.open(NoteEditorComponent, {
+      width: '900px',
+      panelClass: 'custom-dialog-container',
+      data: note
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
+  open(note: Note) {}
 }

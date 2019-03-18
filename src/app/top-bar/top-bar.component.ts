@@ -32,17 +32,21 @@ export class TopBarComponent implements OnInit {
   }
 
   addTag(event: MatChipInputEvent) {
-    // Add tag
-    if ((event.value || '').trim()) {
-      this.notesService.addTag(event.value.trim());
-    }
 
-    // Reset the input value
-    if (event.input) {
-      event.input.value = '';
-    }
+    //Only if none of the autocomplete option is highlighted
+    if (!this.matAutocomplete._keyManager.activeItem) {
+      // Add tag
+      if ((event.value || '').trim()) {
+        this.notesService.addTag(event.value.trim());
+      }
 
-    this.tagCtrl.setValue(null);
+      // Reset the input value
+      if (event.input) {
+        event.input.value = '';
+      }
+
+      this.tagCtrl.setValue(null);
+    }
   }
 
   removeTag(tag: string) {

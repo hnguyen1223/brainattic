@@ -22,6 +22,9 @@ import { NotesContainerComponent } from './notes-container/notes-container.compo
 import { ChunkComponent } from './chunk/chunk.component';
 import { LinkSnippetComponent } from './link-snippet/link-snippet.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
+import { SideBarComponent } from './side-bar/side-bar.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { NoteEditorComponent } from './note-editor/note-editor.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,9 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     NotesContainerComponent,
     ChunkComponent,
     LinkSnippetComponent,
-    TopBarComponent
+    TopBarComponent,
+    SideBarComponent,
+    NoteEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     NgxMasonryModule,
     IconsModule
   ],
-  providers: [NotesService, { provide: FirestoreSettingsToken, useValue: {} }], //until timestampsInSnapshots is removed  https://github.com/angular/angularfire2/issues/1993
-  bootstrap: [AppComponent]
+  providers: [NotesService, { provide: FirestoreSettingsToken, useValue: {} }, {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}], //until timestampsInSnapshots is removed  https://github.com/angular/angularfire2/issues/1993
+  bootstrap: [AppComponent],
+  entryComponents: [NoteEditorComponent]
 })
-export class AppModule { }
+export class AppModule {}

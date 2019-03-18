@@ -13,9 +13,11 @@ import {
   MatDividerModule,
   MatAutocompleteModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatDialogModule
 } from '@angular/material';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [],
@@ -33,7 +35,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatDividerModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    OverlayModule,
+    MatDialogModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -48,7 +52,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatDividerModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    OverlayModule,
+    MatDialogModule
   ]
 })
 export class AngularMaterialModule {}

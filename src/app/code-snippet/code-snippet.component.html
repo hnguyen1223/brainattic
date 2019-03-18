@@ -4,7 +4,7 @@
       class="arrow"
       (click)="toggleCollapsed()"
       [style.transform]="collapsed ? 'rotate(-90deg)' : ''"
-      [style.visibility]="editable ? 'visible' : 'hidden'"
+      [style.visibility]="editable ? 'visible' : 'visible'"
       >keyboard_arrow_down</mat-icon
     >
     <div [attr.contenteditable]="editable" class="name">
@@ -27,7 +27,7 @@
         mat-raised-button
         class="snippet-button"
         matTooltip="Copy"
-        (click)="copyToClipboard(snippet)"
+        (click)="copyToClipboard($event, snippet)"
         tabindex="-1"
       >
         <i-clipboard *ngIf="!isCopied" class="small-icon"></i-clipboard

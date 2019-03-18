@@ -17,7 +17,19 @@ div.note {
   margin-top: 10px;
   /*   max-height: 500px; */
   /*overflow: visible; */
+/*   -webkit-mask-image: linear-gradient(white, white 550px, transparent);
+  mask-image: linear-gradient(white, white 550px, transparent); */
 }
+
+/* .content-container::after {
+  content:'';
+  width:100%;
+  height:100%;    
+  position:absolute;
+  left:0;
+  top:0;
+  background:linear-gradient(transparent 550px, white);
+} */
 .meta {
   display: flex;
   justify-content: space-between;
@@ -66,7 +78,7 @@ div.note {
 
 .drag-handle {
   position: absolute;
-  left: -18px;
+  left: -25px;
   font-size: 20px;
   border-radius: 3px;
   &:hover {

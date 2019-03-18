@@ -1,16 +1,34 @@
 input {
 }
 
-.container{
-    width: 100%;
+.container {
+  width: 100%;
+  display: flex;
+}
+
+.search-bar {
+  flex: 3 1 auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.circle {
+  border-radius: 50%;
+  background-color: grey;
+  height: 65px;
+  width: 65px;
+  display: inline-block;
+  margin: 0 5px 0 40px;
+}
+
+.name{
+    margin: auto;
+}
+
+.user-bar{
     display: flex;
+    align-content: center;
+    height: 65px;
 }
-
-.search-bar{
-    flex: 3 1 auto;
-}
-
-mat-form-field{
-    width: 100%;
-}
-
