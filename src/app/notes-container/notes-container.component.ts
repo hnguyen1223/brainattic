@@ -44,13 +44,16 @@ export class NotesContainerComponent implements OnInit {
   }
 
   editNote(note: Note) {
+    let newNote = JSON.parse(JSON.stringify(note));
     const dialogRef = this.dialog.open(NoteEditorComponent, {
       width: '900px',
       panelClass: 'custom-dialog-container',
-      data: note
+      data: newNote
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (JSON.stringify(note) !== JSON.stringify(newNote))
+        this.notesService.updateNote(newNote);
       console.log('The dialog was closed');
     });
   }

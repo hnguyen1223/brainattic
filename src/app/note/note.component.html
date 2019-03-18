@@ -54,7 +54,7 @@
         [chunk]="item"
         [editable]="editable"
         *ngIf="item.type == 3"
-        (edited)="item = $event"
+        (edited)="note.content[i] = $event"
         (removed)="removeContent(i)"
       >
       </app-code-snippet>
