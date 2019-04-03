@@ -110,6 +110,13 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     }
   }
 
+  saveName(name: string) {
+    if (this.chunk.name !== name) {
+      this.chunk.name = name;
+      this.edited.emit(this.chunk);
+    }
+  }
+
   save(el) {
     this.loading = true;
     if (el.innerText.length == 0 || el.innerText === '\n') {

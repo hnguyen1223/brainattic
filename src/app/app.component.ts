@@ -46,7 +46,12 @@ export class AppComponent {
       });
     }
 
-    let newNote = JSON.parse(originalNote);
+    let newNote: Note = JSON.parse(originalNote);
+    
+    
+    
+    
+    
     const dialogRef = this.dialog.open(NoteEditorComponent, {
       width: '900px',
       panelClass: 'custom-dialog-container',

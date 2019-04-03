@@ -31,10 +31,9 @@ export class NotesService {
         this._notesCollection = db
         .collection('users')
         .doc(user.uid)
-        .collection<Note>('Notes', ref => ref.orderBy('modified', 'desc'));
+        .collection<Note>('Notes', ref => ref.orderBy('modified', 'asc'));
   
         this._notesCollection.stateChanges().subscribe(changeList => {
-          console.log(changeList);
           this.updateList(changeList);
         });
     
@@ -63,6 +62,8 @@ export class NotesService {
   addNote(note: Note): Observable<DocumentReference> {
     let tempNote: Note = JSON.parse(JSON.stringify(note));
     delete tempNote.id;
+    tempNote.modified = new Date(tempNote.modified);
+    tempNote.created = new Date(tempNote.created);
     //tempNote.content.forEach(snippet => delete snippet.formatted)
     return from(this._notesCollection.add(tempNote));
   }
@@ -74,6 +75,9 @@ export class NotesService {
   updateNote(note: Note): Observable<void> {
     let tempNote: Note = JSON.parse(JSON.stringify(note));
     delete tempNote.id;
+    tempNote.modified = new Date(tempNote.modified);
+    tempNote.created = new Date(tempNote.created);
+    
     //tempNote.content.forEach(snippet => delete snippet.formatted)
     return from(this._notesCollection.doc(note.id).update(tempNote));
   }
@@ -83,8 +87,8 @@ export class NotesService {
     let newList = changeList.map(i => i.payload);
     newList.forEach(change => {
       if (change.type == 'added') {
-        currentList.push(change.doc.data());
-        currentList[currentList.length - 1].id = change.doc.id;
+        currentList.unshift(change.doc.data());
+        currentList[0].id = change.doc.id;
         //currentList[currentList.length - 1].content.push({ text: '', type: 1 });
       } else if (change.type == 'modified') {
         let index = currentList.indexOf(
@@ -99,6 +103,8 @@ export class NotesService {
       }
     });
     this._allNotes.next(currentList);
+    console.log(currentList);
+    
   }
 
   getFilteredNotes(): Observable<Note[]> {
