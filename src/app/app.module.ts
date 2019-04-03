@@ -18,6 +18,7 @@ import {
   AngularFirestoreModule,
   FirestoreSettingsToken
 } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth/';
 import { NotesContainerComponent } from './notes-container/notes-container.component';
 import { ChunkComponent } from './chunk/chunk.component';
 import { LinkSnippetComponent } from './link-snippet/link-snippet.component';
@@ -48,10 +49,15 @@ import { NoteEditorComponent } from './note-editor/note-editor.component';
     OverlayModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    AngularFireAuthModule,
     NgxMasonryModule,
     IconsModule
   ],
-  providers: [NotesService, { provide: FirestoreSettingsToken, useValue: {} }, {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}], //until timestampsInSnapshots is removed  https://github.com/angular/angularfire2/issues/1993
+  providers: [
+    NotesService,
+    { provide: FirestoreSettingsToken, useValue: {} },
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: true } }
+  ], //until timestampsInSnapshots is removed  https://github.com/angular/angularfire2/issues/1993
   bootstrap: [AppComponent],
   entryComponents: [NoteEditorComponent]
 })

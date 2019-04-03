@@ -3,7 +3,9 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  Inject
+  Inject,
+  EventEmitter,
+  Output
 } from '@angular/core';
 import { NotesService } from '../notes.service';
 import { Observable } from 'rxjs';
@@ -23,6 +25,7 @@ import { NoteEditorComponent } from '../note-editor/note-editor.component';
 export class NotesContainerComponent implements OnInit {
   private notes: Observable<Note[]>;
   private editable: boolean = false;
+  @Output() private editNote = new EventEmitter<Note>();
   @ViewChild('grid') grid: ElementRef;
 
   constructor(
@@ -41,21 +44,6 @@ export class NotesContainerComponent implements OnInit {
 
   updateNote(note) {
     this.notesService.updateNote(note);
-  }
-
-  editNote(note: Note) {
-    let newNote = JSON.parse(JSON.stringify(note));
-    const dialogRef = this.dialog.open(NoteEditorComponent, {
-      width: '900px',
-      panelClass: 'custom-dialog-container',
-      data: newNote
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (JSON.stringify(note) !== JSON.stringify(newNote))
-        this.notesService.updateNote(newNote);
-      console.log('The dialog was closed');
-    });
   }
   open(note: Note) {}
 }

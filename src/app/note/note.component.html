@@ -1,12 +1,12 @@
 <div class="note" [ngStyle]="{'padding': editable ? '30px' : '15px'}">
   <!--   <button mat-raised-button (click)="addSnippet()">add</button> -->
-  <div class="title" [attr.contenteditable]="editable">{{ note.title }}</div>
+  <div class="title" [attr.contenteditable]="editable" #title (blur) = "note.title = title.innerText">{{ note.title }}</div>
   <mat-chip-list
     class="tags-container"
     [multiple]="false"
     [selectable]="!editable"
   >
-    <mat-icon>label</mat-icon>
+    <mat-icon tabindex="-1">label</mat-icon>
     <mat-chip
       *ngFor="let tag of note.tags"
       [removable]="editable"
@@ -40,6 +40,8 @@
         class="text"
         *ngIf="item.type == 1"
         [attr.contenteditable]="editable"
+        #text
+        (blur) = "note.content[i].text = text.innerText"
       >
         {{ item.text }}
       </div>
@@ -47,6 +49,8 @@
         class="link"
         *ngIf="item.type == 2"
         [attr.contenteditable]="editable"
+        #link
+        (blur) = "note.content[i].text = link.innerText"
       >
         {{ item.text }}
       </div>

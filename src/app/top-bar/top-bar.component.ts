@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { NotesService } from '../notes.service';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -8,6 +8,8 @@ import {
   MatAutocompleteSelectedEvent
 } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
+import { AuthenticationService } from '../authentication.service';
+import { User } from 'firebase';
 
 @Component({
   selector: 'app-top-bar',
@@ -21,14 +23,16 @@ export class TopBarComponent implements OnInit {
   tagCtrl = new FormControl();
   filteredTags: Observable<string[]>;
   chosenTags: Observable<Set<string>>;
-
-  constructor(private notesService: NotesService) {}
+  user$: Observable<User>;
+  @Output() newNote = new EventEmitter<Boolean>();
+  constructor(private notesService: NotesService, private authService: AuthenticationService) {}
 
   ngOnInit() {
     this.filteredTags = this.notesService.getFilteredTags(
       this.tagCtrl.valueChanges
     );
     this.chosenTags = this.notesService.getTags();
+    this.user$ = this.authService.getUser();
   }
 
   addTag(event: MatChipInputEvent) {
@@ -57,5 +61,9 @@ export class TopBarComponent implements OnInit {
     this.notesService.addTag(event.option.viewValue);
     this.searchBox.nativeElement.value = '';
     this.tagCtrl.setValue(null);
+  }
+
+  logout(){
+    this.authService.logout();
   }
 }

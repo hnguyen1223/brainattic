@@ -18,15 +18,16 @@ mat-form-field {
 
 .circle {
   border-radius: 50%;
-  background-color: #ff4081;
   height: 70px;
   width: 70px;
   display: inline-block;
-  margin: 0 5px 0 20px;
+  margin: 0 0 0 20px;
+  border: 2px solid #ff4081;
 }
 
 .name {
   margin: auto 10px;
+  font-weight: 600;
 }
 
 .user-bar {

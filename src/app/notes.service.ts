@@ -8,6 +8,7 @@ import {
   DocumentChangeAction,
   DocumentReference
 } from '@angular/fire/firestore';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,31 +25,34 @@ export class NotesService {
   public filteredNotes: Observable<Note[]>;
   public chosenTags: Observable<Set<string>> = this._chosenTags.asObservable();
 
-  constructor(private db: AngularFirestore) {
-    this._notesCollection = db
+  constructor(private db: AngularFirestore, private authService: AuthenticationService) {
+    this.authService.getUser().subscribe(user => {
+      this._notesCollection = db
       .collection('users')
       .doc('y4jLBH7HqXgJB5sM6IJTzTlNoVi2')
       .collection<Note>('Notes', ref => ref.orderBy('modified', 'desc'));
 
-    this._notesCollection.stateChanges().subscribe(changeList => {
-      console.log(changeList);
-      this.updateList(changeList);
-    });
-
-    this.allTags = this.allNotes.pipe(
-      map(list => {
-        let set = new Set(list.flatMap(item => item.tags));
-        return set;
-      })
-    );
-
-    this.filteredNotes = combineLatest(this._allNotes, this._chosenTags).pipe(
-      map(([notesArray, tagSet]) =>
-        notesArray.filter(note =>
-          Array.from(tagSet).every(tag => note.tags.indexOf(tag) != -1)
+      this._notesCollection.stateChanges().subscribe(changeList => {
+        console.log(changeList);
+        this.updateList(changeList);
+      });
+  
+      this.allTags = this.allNotes.pipe(
+        map(list => {
+          let set = new Set(list.flatMap(item => item.tags));
+          return set;
+        })
+      );
+  
+      this.filteredNotes = combineLatest(this._allNotes, this._chosenTags).pipe(
+        map(([notesArray, tagSet]) =>
+          notesArray.filter(note =>
+            Array.from(tagSet).every(tag => note.tags.indexOf(tag) != -1)
+          )
         )
-      )
-    );
+      );
+
+    });
   }
 
   getNote(id: string) {
@@ -58,7 +62,7 @@ export class NotesService {
   addNote(note: Note): Observable<DocumentReference> {
     let tempNote: Note = JSON.parse(JSON.stringify(note));
     delete tempNote.id;
-    tempNote.content.forEach(snippet => delete snippet.formatted)
+    //tempNote.content.forEach(snippet => delete snippet.formatted)
     return from(this._notesCollection.add(tempNote));
   }
 
@@ -69,7 +73,7 @@ export class NotesService {
   updateNote(note: Note): Observable<void> {
     let tempNote: Note = JSON.parse(JSON.stringify(note));
     delete tempNote.id;
-    tempNote.content.forEach(snippet => delete snippet.formatted)
+    //tempNote.content.forEach(snippet => delete snippet.formatted)
     return from(this._notesCollection.doc(note.id).update(tempNote));
   }
 
