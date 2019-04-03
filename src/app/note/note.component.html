@@ -1,6 +1,6 @@
 <div class="note" [ngStyle]="{'padding': editable ? '30px' : '15px'}">
   <!--   <button mat-raised-button (click)="addSnippet()">add</button> -->
-  <div class="title" [attr.contenteditable]="editable" #title (blur) = "note.title = title.innerText">{{ note.title }}</div>
+  <div class="title" [attr.contenteditable]="editable" #title (blur) = "note.title = title.innerText" [innerText] = "note.title"></div>
   <mat-chip-list
     class="tags-container"
     [multiple]="false"
@@ -72,17 +72,18 @@
       <button
         mat-raised-button
         (click)="draggable = !draggable"
+        matTooltip="Reorder"
       >
         <mat-icon *ngIf="draggable" color="accent">reorder</mat-icon>
         <mat-icon *ngIf="!draggable">reorder</mat-icon>
       </button>
-      <button mat-raised-button (click)="addText()">
+      <button mat-raised-button (click)="addText()" matTooltip="Add Text">
         <mat-icon>text_fields</mat-icon>
       </button>
-      <button mat-raised-button (click)="addSnippet()">
+      <button mat-raised-button (click)="addSnippet()" matTooltip="Add Code">
         <mat-icon>code</mat-icon>
       </button>
-      <button mat-raised-button (click)="addSnippet()">
+      <button mat-raised-button (click)="addSnippet()" matTooltip="Add Link">
         <mat-icon>link</mat-icon>
       </button>
     </div>

@@ -27,31 +27,32 @@ export class NotesService {
 
   constructor(private db: AngularFirestore, private authService: AuthenticationService) {
     this.authService.getUser().subscribe(user => {
-      this._notesCollection = db
-      .collection('users')
-      .doc('y4jLBH7HqXgJB5sM6IJTzTlNoVi2')
-      .collection<Note>('Notes', ref => ref.orderBy('modified', 'desc'));
-
-      this._notesCollection.stateChanges().subscribe(changeList => {
-        console.log(changeList);
-        this.updateList(changeList);
-      });
+      if (user){
+        this._notesCollection = db
+        .collection('users')
+        .doc(user.uid)
+        .collection<Note>('Notes', ref => ref.orderBy('modified', 'desc'));
   
-      this.allTags = this.allNotes.pipe(
-        map(list => {
-          let set = new Set(list.flatMap(item => item.tags));
-          return set;
-        })
-      );
-  
-      this.filteredNotes = combineLatest(this._allNotes, this._chosenTags).pipe(
-        map(([notesArray, tagSet]) =>
-          notesArray.filter(note =>
-            Array.from(tagSet).every(tag => note.tags.indexOf(tag) != -1)
+        this._notesCollection.stateChanges().subscribe(changeList => {
+          console.log(changeList);
+          this.updateList(changeList);
+        });
+    
+        this.allTags = this.allNotes.pipe(
+          map(list => {
+            let set = new Set(list.flatMap(item => item.tags));
+            return set;
+          })
+        );
+    
+        this.filteredNotes = combineLatest(this._allNotes, this._chosenTags).pipe(
+          map(([notesArray, tagSet]) =>
+            notesArray.filter(note =>
+              Array.from(tagSet).every(tag => note.tags.indexOf(tag) != -1)
+            )
           )
-        )
-      );
-
+        );
+      }
     });
   }
 
