@@ -36,13 +36,13 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
   constructor(
     private http: HttpClient,
     private uiStateService: UistateService
-  ) {}
+  ) { }
   counter = 0;
 
   ngOnInit() {
     feather.replace({ color: 'red' });
     if (this.snippet) {
-      this.snippet.nativeElement.addEventListener('paste', function(e) {
+      this.snippet.nativeElement.addEventListener('paste', function (e) {
         e.preventDefault();
         // get text representation of clipboard
         var text = (e.originalEvent || e).clipboardData.getData('text/plain');
@@ -56,7 +56,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.save(this.snippet.nativeElement);
+    hljs.highlightBlock(this.snippet.nativeElement);
   }
 
   toggleEditable(el) {
@@ -91,7 +91,7 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onKeyUp(event) {}
+  onKeyUp(event) { }
 
   getCursor(node, preText: string, text: string) {
     if (node.nodeType == 3 || (<Element>node).tagName.toLowerCase() == 'br') {
@@ -115,30 +115,33 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     if (el.innerText.length == 0 || el.innerText === '\n') {
       //el.innerText = placeholderText;
     }
-    this.chunk.text = el.innerText;
-    let params = new HttpParams();
-    params = params.append('string', this.chunk.text);
-    params = params.append('cursor', '1');
-    params = params.append('parser', 'css');
-    this.http
-      .get('https://brainattic-server.appspot.com/format', {
-        params
-      })
-      .subscribe(
-        result => {
-          this.chunk.text = result['formatted'];
-          el.innerText = this.chunk.text;
 
-          hljs.highlightBlock(el);
-          this.loading = false;
-          this.edited.emit(this.chunk);
-        },
-        error => {
-          console.log(JSON.stringify(error));
-          this.loading = false;
-          //toast message goes here
-        }
-      );
+    if (this.chunk.text !== el.innerText) {
+      let params = new HttpParams();
+      params = params.append('string', el.innerText);
+      params = params.append('cursor', '1');
+      params = params.append('parser', 'css');
+      this.http
+        .get('https://brainattic-server.appspot.com/format', {
+          params
+        })
+        .subscribe(
+          result => {
+            this.chunk.text = result['formatted'];
+            el.innerText = this.chunk.text;
+            console.log(`network called`);
+
+            hljs.highlightBlock(el);
+            this.loading = false;
+            this.edited.emit(this.chunk);
+          },
+          error => {
+            console.log(JSON.stringify(error));
+            this.loading = false;
+            //toast message goes here
+          }
+        );
+    }
   }
 
   copyToClipboard(event: Event, element: Element) {
@@ -166,10 +169,11 @@ export class CodeSnippetComponent implements OnInit, AfterViewInit {
     event.stopPropagation();
   }
 
-  toggleCollapsed() {
+  toggleCollapsed(event: Event) {
     this.collapsed = !this.collapsed;
+    event.stopPropagation();
   }
-  deleteSnippet(element) {}
+  deleteSnippet(element) { }
 
   remove() {
     this.removed.emit(this.chunk);

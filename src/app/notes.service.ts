@@ -58,6 +58,7 @@ export class NotesService {
   addNote(note: Note): Observable<DocumentReference> {
     let tempNote: Note = JSON.parse(JSON.stringify(note));
     delete tempNote.id;
+    tempNote.content.forEach(snippet => delete snippet.formatted)
     return from(this._notesCollection.add(tempNote));
   }
 
@@ -68,6 +69,7 @@ export class NotesService {
   updateNote(note: Note): Observable<void> {
     let tempNote: Note = JSON.parse(JSON.stringify(note));
     delete tempNote.id;
+    tempNote.content.forEach(snippet => delete snippet.formatted)
     return from(this._notesCollection.doc(note.id).update(tempNote));
   }
 

@@ -2,7 +2,7 @@
   <div class="header">
     <mat-icon
       class="arrow"
-      (click)="toggleCollapsed()"
+      (click)="toggleCollapsed($event)"
       [style.transform]="collapsed ? 'rotate(-90deg)' : ''"
       [style.visibility]="editable ? 'visible' : 'visible'"
       >keyboard_arrow_down</mat-icon
