@@ -4,4 +4,4 @@
 
 1. Clone the repository
 2. Run `npm install` to install dependencies
-3. Run `ng s -o` to run a dev server and opens a new tab to `http://localhost:4200/`
+3. Run `ng s -o` to run a dev server and open a new tab to `http://localhost:4200/`
