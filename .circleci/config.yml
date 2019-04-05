@@ -42,13 +42,13 @@ jobs:
               - node_modules
 
       # run tests!
-      - run:
-          name: Unit testing
-          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      # - run:
+          # name: Unit testing
+          # command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
-      - run:
-          name: Integration testing
-          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+      # - run:
+          # name: Integration testing
+          # command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 
       # Build project with different configuration based on the current branch
       - run:

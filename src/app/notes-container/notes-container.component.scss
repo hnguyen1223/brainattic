@@ -1,0 +1,36 @@
+app-note {
+  margin-bottom: 15px;
+}
+
+.container {
+}
+
+app-note {
+  width: 400px;
+/*   max-height: 600px !important;
+  overflow: hidden; */
+}
+
+.grid-item {
+}
+
+ngx-masonry {
+  margin-left: auto;
+  margin-right: auto;
+  //width: 1800px;
+}
+/* @media only screen and (max-width: 1800px) {
+  ngx-masonry {
+    width: 1350px;
+  }
+}
+@media only screen and (max-width: 1350px) {
+  ngx-masonry {
+    width: 900px;
+  }
+}
+@media only screen and (max-width: 900px) {
+  ngx-masonry {
+    width: 450px;
+  }
+} */

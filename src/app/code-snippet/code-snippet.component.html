@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="header">
+    <mat-icon class="arrow" (click)="toggleCollapsed($event)" [style.transform]="collapsed ? 'rotate(-90deg)' : ''"
+      [style.visibility]="editable ? 'visible' : 'visible'">keyboard_arrow_down</mat-icon>
+    <div [attr.contenteditable]="editable" class="name" #name (blur)="saveName(name.innerText)"
+      [innerText]="chunk.name">
+
+    </div>
+    <div class="action-bar">
+      <button *ngIf="editable" mat-raised-button class="snippet-button" matTooltip="Delete Snippet" (click)="remove()"
+        color="accent" tabindex="-1">
+        <i-trash-2 class="small-icon"></i-trash-2>
+        <mat-spinner *ngIf="false" diameter="30" color="primary"></mat-spinner>
+      </button>
+      <button mat-raised-button class="snippet-button" matTooltip="Copy" (click)="copyToClipboard($event, snippet)"
+        tabindex="-1">
+        <i-clipboard *ngIf="!isCopied" class="small-icon"></i-clipboard>
+        <i-check *ngIf="isCopied" class="fill-green small-icon"></i-check>
+      </button>
+    </div>
+  </div>
+  <pre
+    [ngClass]="{ 'code-wrapper': true, collapsed: collapsed }"><code [attr.contenteditable]="editable" (keydown)=onKeyDown($event) (keyup)=onKeyUp($event) #snippet spellcheck="false" id="snippets" (blur)="save(snippet)" [style.overflow]="editable?'auto':'hidden'">{{ this.chunk.text }}</code></pre>
+</div>

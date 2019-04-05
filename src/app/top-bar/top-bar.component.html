@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="new-btn">
+    <button mat-raised-button color="accent" (click)="newNote.emit()">
+      <mat-icon>add</mat-icon> Note
+    </button>
+  </div>
+  <div class="search-bar">
+    <mat-form-field class="chip-list" appearance="outline">
+      <mat-label>Search</mat-label>
+      <mat-chip-list #chipList>
+        <mat-chip
+          *ngFor="let tag of (chosenTags | async)"
+          [selectable]="selectable"
+          [removable]="true"
+          (removed)="removeTag(tag)"
+        >
+          {{ tag }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          #searchBox
+          [formControl]="tagCtrl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addTag($event)"
+        />
+      </mat-chip-list>
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selectTag($event)"
+      >
+        <mat-option *ngFor="let tag of (filteredTags | async)" [value]="tag">
+          {{ tag }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="user-bar" *ngIf="(user$ | async) as user">
+    <img [src]="user.photoURL" class="circle" alt="Profile Picture" (click)="logout()" />
+    <span class="name">{{ user.displayName }}</span>
+  </div>
+</div>

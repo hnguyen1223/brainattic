@@ -1,0 +1,92 @@
+<div class="note" [ngStyle]="{'padding': editable ? '30px' : '15px'}">
+  <!--   <button mat-raised-button (click)="addSnippet()">add</button> -->
+  <div class="title" [attr.contenteditable]="editable" #title (blur) = "note.title = title.innerText" [innerText] = "note.title"></div>
+  <mat-chip-list
+    class="tags-container"
+    [multiple]="false"
+    [selectable]="!editable"
+  >
+    <mat-icon tabindex="-1">label</mat-icon>
+    <mat-chip
+      *ngFor="let tag of note.tags"
+      [removable]="editable"
+      (removed)="(1)"
+      [color]="primary"
+      tabindex="-1"
+    >
+      {{ tag }}
+      <mat-icon matChipRemove *ngIf="editable">cancel</mat-icon>
+    </mat-chip></mat-chip-list
+  >
+  <div
+    class="content-container"
+    [style.overflow]="editable ? 'visible' : 'hidden'"
+    cdkDropList
+    (cdkDropListDropped)="drop($event)"
+    [cdkDropListDisabled]="!draggable"
+  >
+    <div
+      class="wrapper"
+      *ngFor="let item of note.content; let i = index"
+      cdkDrag
+    >
+      <mat-icon
+        [ngClass]="{ 'drag-handle': true, lower: item.type == 3 }"
+        [style.visibility]="draggable ? 'visible' : 'hidden'"
+        color="accent"
+        >drag_indicator</mat-icon
+      >
+      <div
+        class="text"
+        *ngIf="item.type == 1"
+        [attr.contenteditable]="editable"
+        #text
+        (blur) = "note.content[i].text = text.innerText"
+      >
+        {{ item.text }}
+      </div>
+      <div
+        class="link"
+        *ngIf="item.type == 2"
+        [attr.contenteditable]="editable"
+        #link
+        (blur) = "note.content[i].text = link.innerText"
+      >
+        {{ item.text }}
+      </div>
+      <app-code-snippet
+        [chunk]="item"
+        [editable]="editable"
+        *ngIf="item.type == 3"
+        (edited)="note.content[i] = $event"
+        (removed)="removeContent(i)"
+      >
+      </app-code-snippet>
+      <!--       <button mat-button class="new-line" *ngIf="editable" (click)="addContent(i)" matTooltip="insert">
+        <mat-icon>arrow_right</mat-icon>
+      </button> -->
+    </div>
+  </div>
+  <div class="meta">
+    <div class="action-bar" *ngIf="editable">
+      <button
+        mat-raised-button
+        (click)="draggable = !draggable"
+        matTooltip="Reorder"
+      >
+        <mat-icon *ngIf="draggable" color="accent">reorder</mat-icon>
+        <mat-icon *ngIf="!draggable">reorder</mat-icon>
+      </button>
+      <button mat-raised-button (click)="addText()" matTooltip="Add Text">
+        <mat-icon>text_fields</mat-icon>
+      </button>
+      <button mat-raised-button (click)="addSnippet()" matTooltip="Add Code">
+        <mat-icon>code</mat-icon>
+      </button>
+      <button mat-raised-button (click)="addSnippet()" matTooltip="Add Link">
+        <mat-icon>link</mat-icon>
+      </button>
+    </div>
+    <span>{{ note.modified.seconds * 1000 | date: 'mediumDate' }}</span>
+  </div>
+</div>

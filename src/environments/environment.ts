@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: 'AIzaSyAsNYRit9tPrLZ3DfkgnR-egFsg9Vjh7qg',
+    authDomain: 'brainattic-dev.firebaseapp.com',
+    databaseURL: 'https://brainattic-dev.firebaseio.com',
+    projectId: 'brainattic-dev',
+    storageBucket: 'brainattic-dev.appspot.com',
+    messagingSenderId: '355906550575'
+  }
 };
 
 /*

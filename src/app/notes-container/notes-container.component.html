@@ -1,0 +1,5 @@
+<ngx-masonry class="container grid" #grid [useImagesLoaded]="true" [options]="{ gutter: 15 }">
+  <app-note ngxMasonryItem class="note grid-item" *ngFor="let note of (notes | async)" [note]="note"
+    (click)="editNote.emit(note)">
+  </app-note>
+</ngx-masonry>
